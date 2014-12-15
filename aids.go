@@ -26,7 +26,7 @@ func main() {
 	file += newLenChars(10, StdChars)
 	file += ".png"
 	if runtime.GOOS == "darwin" {
-		exec.Command("screencapture", file).Run()
+		exec.Command("screencapture", "-i", file).Run()
 	} else {
 		exec.Command("scrot", file, "-s").Run()
 	}
