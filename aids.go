@@ -10,6 +10,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"runtime"
 
 	"github.com/jboelter/notificator"
 )
@@ -24,9 +25,13 @@ func main() {
 	file := "/tmp/"
 	file += newLenChars(10, StdChars)
 	file += ".png"
-	err := exec.Command("scrot", file, "-s").Run()
+	if runtime.GOOS == "darwin" {
+		err := exec.Command("screencapture", "-i", file).Run()
+	} else {
+		exec.Command("scrot", file, "-s").Run()
+	}
 	if err != nil {
-		notify.Push("aids", "aborting.")
+		notify.Push("aids", "aborting")
 		return
 	}
 	notify.Push("aids", "Uploading...")
@@ -36,7 +41,11 @@ func main() {
 		return
 	}
 	notify.Push("aids", "Done!")
-	exec.Command("xdg-open", url).Run()
+	if runtime.GOOS == "darwin" {
+		exec.Command("open", url).Run()
+	} else {
+		exec.Command("xdg-open", url).Run()
+	}
 
 }
 func Upload(filename string) (string, error) {
