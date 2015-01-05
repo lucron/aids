@@ -24,7 +24,11 @@ func main() {
 	file := "/tmp/"
 	file += newLenChars(10, StdChars)
 	file += ".png"
-	exec.Command("scrot", file, "-s").Run()
+	err := exec.Command("scrot", file, "-s").Run()
+	if err != nil {
+		notify.Push("aids", "aborting.")
+		return
+	}
 	notify.Push("aids", "Uploading...")
 	url, err := Upload(file)
 	if err != nil {
