@@ -25,10 +25,11 @@ func main() {
 	file := "/tmp/"
 	file += newLenChars(10, StdChars)
 	file += ".png"
+	var err error
 	if runtime.GOOS == "darwin" {
-		err := exec.Command("screencapture", "-i", file).Run()
+		err = exec.Command("screencapture", "-i", file).Run()
 	} else {
-		exec.Command("scrot", file, "-s").Run()
+		err = exec.Command("scrot", file, "-s").Run()
 	}
 	if err != nil {
 		notify.Push("aids", "aborting")
